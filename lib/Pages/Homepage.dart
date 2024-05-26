@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:the_social/Chat/chats.dart';
+import 'package:the_social/Pages/SelectContact.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({Key? key}) : super(key: key);
@@ -37,10 +38,32 @@ class _HomepageState extends State<Homepage>
             onPressed: () {},
             icon: const Icon(Icons.search),
           ),
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.more_vert),
-          )
+          PopupMenuButton(onSelected :(value){
+            print(value);
+          },itemBuilder: (BuildContext context) {
+            return [
+              const PopupMenuItem(
+                value: "New Group",
+                child: Text("New Group"),
+              ),
+              const PopupMenuItem(
+                value: "New Broadcast",
+                child: Text("New Broadcast"),
+              ),
+              const PopupMenuItem(
+                value: "WhatsApp Web",
+                child: Text("WhatsApp Web"),
+              ),
+              const PopupMenuItem(
+                value: "Starred Messages",
+                child: Text("Starred Messages"),
+              ),
+              const PopupMenuItem(
+                value: "Settings",
+                child: Text("Settings"),
+              ),
+            ];
+          })
         ],
         bottom: TabBar(
           controller: _controller,
@@ -104,9 +127,12 @@ class _HomepageState extends State<Homepage>
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
         backgroundColor: const Color(0xFF075E54),
-        child: Icon(
-          Icons.message,
+        child: IconButton(
+          icon : const Icon(Icons.message),
           color: Colors.white,
+          onPressed: (){
+            Navigator.push(context, MaterialPageRoute(builder: (context)=> Selectcontact()));
+          },
         ),
       ),
     );

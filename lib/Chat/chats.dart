@@ -10,7 +10,7 @@ class chats extends StatelessWidget {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => chatdetail()),
+          MaterialPageRoute(builder: (context) => const chatdetail()),
         );
       },
       child: const ListTile(

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:the_social/Pages/Homepage.dart';
 import 'package:the_social/Pages/SplashScreen.dart';
+import 'package:the_social/Pages/profile.dart';
 
 void main() {
   runApp(const MyApp());
