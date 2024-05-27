@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:the_social/Models/ChatModels.dart';
 import 'package:the_social/Pages/ContactCard.dart';
 class Selectcontact extends StatefulWidget {
   const Selectcontact({super.key});
@@ -10,8 +11,16 @@ class Selectcontact extends StatefulWidget {
 class _SelectcontactState extends State<Selectcontact> {
   @override
   Widget build(BuildContext context) {
+    List<ChatModel> contacts =[
+      ChatModel(name: "Meet Rasania",status: "hello", icon: '', isgroup: false, currentmessage: '', time: ''),
+      ChatModel(name: "Meet Patel",status: "hello1", icon: '', isgroup: false, currentmessage: '', time: ''),
+      ChatModel(name: "Meet Shah",status: "hello2", icon: '', isgroup: false, currentmessage: '', time: ''),
+    ];
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(icon: Icon(Icons.arrow_back_ios), onPressed: (){
+          Navigator.pop(context);
+        },),
         iconTheme: const IconThemeData(color: Colors.white),
         backgroundColor: const Color(0xFF075E54),
         title: const Column(
@@ -47,14 +56,7 @@ class _SelectcontactState extends State<Selectcontact> {
           })
         ],
       ),
-      body: Expanded(
-          flex: 1,
-          child: ListView(
-            children: const [
-              Contactcard(),
-            ],
-          ),
-        ),
+      body: ListView.builder(itemCount:contacts.length,itemBuilder: (context,index)=> Contactcard(contact: contacts[index],))
     );
   }
 }

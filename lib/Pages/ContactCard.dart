@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-class Contactcard extends StatefulWidget {
-  const Contactcard({super.key});
+import 'package:the_social/Models/ChatModels.dart';
 
-  @override
-  State<Contactcard> createState() => _ContactcardState();
-}
+class Contactcard extends StatelessWidget {
+  const Contactcard({super.key, required this.contact});
+  final ChatModel contact;
 
-class _ContactcardState extends State<Contactcard> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -17,8 +15,8 @@ class _ContactcardState extends State<Contactcard> {
           radius: 30,
           child: Icon(Icons.person,color: Colors.white,size: 29,),
         ),
-        title: Text("Meet Rasania",style: TextStyle(fontWeight: FontWeight.bold),),
-        subtitle: Text("A Flutter Developer",),
+        title: Text(contact.name,style: TextStyle(fontWeight: FontWeight.bold),),
+        subtitle: Text(contact.status,),
       ),
     );
   }
