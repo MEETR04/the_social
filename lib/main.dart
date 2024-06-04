@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:the_social/Pages/ContactCard.dart';
 import 'package:the_social/Pages/Homepage.dart';
+import 'package:the_social/Pages/NewGroup.dart';
 import 'package:the_social/Pages/SelectContact.dart';
 import 'package:the_social/Pages/SplashScreen.dart';
 import 'package:the_social/Pages/profile.dart';
@@ -17,7 +18,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: SplashScreen(),
+      home: Homepage(),
     );
   }
 }
