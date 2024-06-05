@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:the_social/ButtonCard.dart';
+import 'package:the_social/Widgets/ButtonCard.dart';
 import 'package:the_social/Models/ChatModels.dart';
 import 'package:the_social/Pages/ContactCard.dart';
 import 'package:the_social/Pages/Homepage.dart';

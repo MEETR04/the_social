@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:the_social/Pages/ContactCard.dart';
 import 'package:the_social/Pages/Homepage.dart';
-import 'package:the_social/Pages/NewGroup.dart';
-import 'package:the_social/Pages/SelectContact.dart';
-import 'package:the_social/Pages/SplashScreen.dart';
-import 'package:the_social/Pages/profile.dart';
+import 'package:the_social/Widgets/CameraScreen.dart';
+import 'package:camera/camera.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  cameras = await availableCameras();
   runApp(const MyApp());
 }
 

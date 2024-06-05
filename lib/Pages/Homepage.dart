@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:the_social/Chat/chats.dart';
 import 'package:the_social/Pages/SelectContact.dart';
+import 'package:the_social/Pages/camera.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({Key? key}) : super(key: key);
@@ -71,7 +72,7 @@ class _HomepageState extends State<Homepage>
           unselectedLabelColor: Colors.white,
           indicatorColor: Colors.white,
           tabs: const [
-            Tab(icon: Icon(Icons.groups)),
+            Tab(icon: Icon(Icons.camera_alt_rounded)),
             Tab(
               text: 'Chats',
             ),
@@ -83,12 +84,7 @@ class _HomepageState extends State<Homepage>
       body: TabBarView(
         controller: _controller,
         children: const [
-          Center(
-            child: Text(
-              'This is Community Page',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
-            ),
-          ),
+          CameraPage(),
           SingleChildScrollView(
             child: Column(
               children: [

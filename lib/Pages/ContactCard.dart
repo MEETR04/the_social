@@ -8,13 +8,13 @@ class Contactcard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Container(
+      leading: SizedBox(
         height: 53,
         width: 50,
         child: Stack(
             children: [
           CircleAvatar(
-            backgroundColor: Colors.grey,
+            backgroundColor: Colors.blueGrey[200],
             radius: 30,
             child: Icon(
               Icons.person,
@@ -23,8 +23,8 @@ class Contactcard extends StatelessWidget {
             ),
           ),
               contact.select ? Positioned(
-              bottom: 4,
-              right: 5,
+              bottom: 0,
+              right: 0,
               child: CircleAvatar(
                 backgroundColor: Colors.teal,
                 radius: 12,
