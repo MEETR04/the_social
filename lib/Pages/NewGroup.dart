@@ -20,7 +20,7 @@ class _NewGroupState extends State<NewGroup> {
         isgroup: false,
         currentmessage: '',
         time: '',
-        select: false),
+        select: false, id: 1),
     ChatModel(
         name: "Meet Patel",
         status: "hello1",
@@ -28,7 +28,7 @@ class _NewGroupState extends State<NewGroup> {
         isgroup: false,
         currentmessage: '',
         time: '',
-        select: false),
+        select: false, id: 2),
     ChatModel(
         name: "Meet Shah",
         status: "hello2",
@@ -36,7 +36,7 @@ class _NewGroupState extends State<NewGroup> {
         isgroup: false,
         currentmessage: '',
         time: '',
-        select: false),
+        select: false, id: 3),
     ChatModel(
         name: "Meet Shah",
         status: "hello2",
@@ -44,7 +44,7 @@ class _NewGroupState extends State<NewGroup> {
         isgroup: false,
         currentmessage: '',
         time: '',
-        select: false),
+        select: false, id: 4),
     ChatModel(
         name: "Meet Shah",
         status: "hello2",
@@ -52,7 +52,7 @@ class _NewGroupState extends State<NewGroup> {
         isgroup: false,
         currentmessage: '',
         time: '',
-        select: false),
+        select: false, id: 5),
     ChatModel(
         name: "Meet Shah",
         status: "hello2",
@@ -60,7 +60,7 @@ class _NewGroupState extends State<NewGroup> {
         isgroup: false,
         currentmessage: '',
         time: '',
-        select: false),
+        select: false, id: 6),
     ChatModel(
         name: "Meet Shah",
         status: "hello2",
@@ -68,7 +68,7 @@ class _NewGroupState extends State<NewGroup> {
         isgroup: false,
         currentmessage: '',
         time: '',
-        select: false),
+        select: false, id: 7),
     ChatModel(
         name: "Meet Shah",
         status: "hello5",
@@ -76,7 +76,7 @@ class _NewGroupState extends State<NewGroup> {
         isgroup: false,
         currentmessage: '',
         time: '',
-        select: false),
+        select: false, id: 8),
   ];
   List<ChatModel> groups = [];
   @override

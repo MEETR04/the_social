@@ -23,7 +23,7 @@ class _SelectcontactState extends State<Selectcontact> {
           isgroup: false,
           currentmessage: '',
           time: '',
-          select: false),
+          select: false, id: 1),
       ChatModel(
           name: "Meet Patel",
           status: "hello1",
@@ -31,7 +31,7 @@ class _SelectcontactState extends State<Selectcontact> {
           isgroup: false,
           currentmessage: '',
           time: '',
-          select: false),
+          select: false, id: 2),
       ChatModel(
           name: "Meet Shah",
           status: "hello2",
@@ -39,7 +39,7 @@ class _SelectcontactState extends State<Selectcontact> {
           isgroup: false,
           currentmessage: '',
           time: '',
-          select: false),
+          select: false, id: 3),
       ChatModel(
           name: "Meet Shah",
           status: "hello2",
@@ -47,7 +47,7 @@ class _SelectcontactState extends State<Selectcontact> {
           isgroup: false,
           currentmessage: '',
           time: '',
-          select: false),
+          select: false, id: 4),
     ];
     return Scaffold(
         appBar: AppBar(

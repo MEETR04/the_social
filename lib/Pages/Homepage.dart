@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:the_social/Chat/chats.dart';
+import 'package:the_social/Models/ChatModels.dart';
 import 'package:the_social/Pages/SelectContact.dart';
 import 'package:the_social/Pages/camera.dart';
 
 class Homepage extends StatefulWidget {
-  const Homepage({Key? key}) : super(key: key);
+  const Homepage({Key? key, required this.chatModel,required this.sourcechat}) : super(key: key);
+  final List<ChatModel> chatModel;
+  final ChatModel sourcechat;
 
   @override
   State<Homepage> createState() => _HomepageState();
@@ -32,7 +35,9 @@ class _HomepageState extends State<Homepage>
         iconTheme: const IconThemeData(color: Colors.white),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>CameraPage()));
+            },
             icon: const Icon(Icons.camera_alt_outlined),
           ),
           IconButton(
@@ -83,28 +88,11 @@ class _HomepageState extends State<Homepage>
       ),
       body: TabBarView(
         controller: _controller,
-        children: const [
+        children:  [
           CameraPage(),
-          SingleChildScrollView(
-            child: Column(
-              children: [
-                chats(),
-                chats(),
-                chats(),
-                chats(),
-                chats(),
-                chats(),
-                chats(),
-                chats(),
-                chats(),
-                chats(),
-                chats(),
-                chats(),
-                chats(),
-                chats(),
-                chats(),
-              ],
-            ),
+          chats(
+            chatModel: widget.chatModel,
+            sourcechat: widget.sourcechat,
           ),
           Center(
             child: Text(
@@ -120,17 +108,7 @@ class _HomepageState extends State<Homepage>
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        backgroundColor: const Color(0xFF075E54),
-        child: IconButton(
-          icon : const Icon(Icons.message),
-          color: Colors.white,
-          onPressed: (){
-            Navigator.push(context, MaterialPageRoute(builder: (context)=> Selectcontact()));
-          },
-        ),
-      ),
+
     );
   }
 }
