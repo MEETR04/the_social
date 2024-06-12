@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class ReplyMessageCard extends StatelessWidget {
   const ReplyMessageCard({super.key, required this.message});
@@ -7,6 +8,8 @@ class ReplyMessageCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var time = DateTime.now();
+    var time2 = DateFormat('HH:mm').format(time);
     return Align(
       alignment: Alignment.centerLeft,
       child: ConstrainedBox(
@@ -34,7 +37,7 @@ class ReplyMessageCard extends StatelessWidget {
                   bottom: 4,
                   right: 10,
                   child: Text(
-                    "22:30",
+                    time2,
                     style: TextStyle(color: Colors.black38),
                   ),)
             ],

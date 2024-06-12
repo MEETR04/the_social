@@ -1,11 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+
 class OwnMessageCard extends StatelessWidget {
   const OwnMessageCard({super.key, required this.message});
   final String message;
 
   @override
   Widget build(BuildContext context) {
+    var time = DateTime.now();
+    var time2 = DateFormat('HH:mm').format(time);
     return  Align(
       alignment: Alignment.centerRight,
       child: ConstrainedBox(constraints: BoxConstraints(
@@ -25,11 +29,11 @@ class OwnMessageCard extends StatelessWidget {
             Positioned(bottom: 4,
             right: 10,
             child: Row(children: [
-      Text("22:30",style: TextStyle(color: Colors.black38),),
+      Text(time2,style: TextStyle(color: Colors.black38),),
               SizedBox(
                 width: 5,
               ),
-              Icon(Icons.done_all,color: Colors.black38,size: 20,)
+              Icon(Icons.done_all,color: Colors.blue,size: 20,)
             ],))
           ],
         ),

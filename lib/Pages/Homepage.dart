@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:the_social/Chat/chats.dart';
 import 'package:the_social/Models/ChatModels.dart';
-import 'package:the_social/Pages/SelectContact.dart';
 import 'package:the_social/Pages/camera.dart';
+
+import 'StatusPage.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({Key? key, required this.chatModel,required this.sourcechat}) : super(key: key);
@@ -36,7 +37,7 @@ class _HomepageState extends State<Homepage>
         actions: [
           IconButton(
             onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context)=>CameraPage()));
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>const CameraPage()));
             },
             icon: const Icon(Icons.camera_alt_outlined),
           ),
@@ -89,18 +90,13 @@ class _HomepageState extends State<Homepage>
       body: TabBarView(
         controller: _controller,
         children:  [
-          CameraPage(),
+          const CameraPage(),
           chats(
             chatModel: widget.chatModel,
             sourcechat: widget.sourcechat,
           ),
-          Center(
-            child: Text(
-              'This is Updates Page',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
-            ),
-          ),
-          Center(
+          const StatusPage(),
+          const Center(
             child: Text(
               'This is Calls Page',
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:the_social/Pages/Homepage.dart';
+import 'package:the_social/Pages/LandingPage.dart';
 import 'package:the_social/Pages/LoginScreen.dart';
 import 'package:the_social/Pages/SplashScreen.dart';
+import 'package:the_social/Pages/StatusPage.dart';
 import 'package:the_social/Pages/camera.dart';
 import 'package:the_social/Widgets/CameraScreen.dart';
 import 'package:camera/camera.dart';
@@ -22,7 +24,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: LoginInScreen()
+      home: LandingPage()
     );
   }
 }
