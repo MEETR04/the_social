@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:the_social/Chat/chats.dart';
 import 'package:the_social/Models/ChatModels.dart';
-import 'package:the_social/Pages/camera.dart';
+import 'package:the_social/Pages/Camera.dart';
+import 'package:the_social/Pages/CameraView.dart';
+import 'package:the_social/Widgets/CameraScreen.dart';
 
 import 'StatusPage.dart';
 
@@ -37,7 +39,8 @@ class _HomepageState extends State<Homepage>
         actions: [
           IconButton(
             onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context)=>const CameraPage()));
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>
+                  Camera()));
             },
             icon: const Icon(Icons.camera_alt_outlined),
           ),
@@ -90,7 +93,7 @@ class _HomepageState extends State<Homepage>
       body: TabBarView(
         controller: _controller,
         children:  [
-          const CameraPage(),
+          CameraScreen(onImageSend: (){}),
           chats(
             chatModel: widget.chatModel,
             sourcechat: widget.sourcechat,

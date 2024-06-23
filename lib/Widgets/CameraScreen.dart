@@ -7,7 +7,8 @@ import 'package:the_social/Pages/VideoView.dart';
 List<CameraDescription> cameras = [];
 
 class CameraScreen extends StatefulWidget {
-  const CameraScreen({super.key});
+  const CameraScreen({super.key, required this.onImageSend});
+  final Function onImageSend;
 
   @override
   State<CameraScreen> createState() => _CameraScreenState();
@@ -20,6 +21,7 @@ class _CameraScreenState extends State<CameraScreen> {
   bool isrecording = false;
   bool isflash = false;
   bool iscamerafront = true;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -116,16 +118,14 @@ class _CameraScreenState extends State<CameraScreen> {
                                   size: 80,
                                 )),
                       IconButton(
-                          onPressed: ()async{
+                          onPressed: () async {
                             setState(() {
-                              iscamerafront =
-                              !iscamerafront;
+                              iscamerafront = !iscamerafront;
                             });
                             int camerapos = iscamerafront ? 0 : 1;
                             _cameraController = CameraController(
                                 cameras[camerapos], ResolutionPreset.high);
                             cameravalue = _cameraController.initialize();
-
                           },
                           icon: Icon(
                             Icons.flip_camera_android,
@@ -152,6 +152,9 @@ class _CameraScreenState extends State<CameraScreen> {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => CameraView(imagepath: picture.path,)));
+            builder: (context) => CameraView(
+                  imagepath: picture.path,
+                  onSend: widget.onImageSend,
+                )));
   }
 }

@@ -3,8 +3,11 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 class CameraView extends StatelessWidget {
-  const CameraView({super.key, required this.imagepath});
+  const CameraView({super.key, required this.imagepath, required this.onSend});
+
   final String imagepath;
+  final Function onSend;
+  static TextEditingController _controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -55,10 +58,12 @@ class CameraView extends StatelessWidget {
             bottom: 0,
             child: Container(
               width: MediaQuery.sizeOf(context).width,
+              color: Colors.black,
               child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 5,horizontal: 8),
+                padding: EdgeInsets.symmetric(vertical: 5, horizontal: 8),
                 child: TextFormField(
-                  style: TextStyle(color: Colors.white,fontSize: 20),
+                  controller: _controller,
+                  style: TextStyle(color: Colors.white, fontSize: 20),
                   minLines: 1,
                   maxLines: 6,
                   decoration: InputDecoration(
@@ -70,14 +75,20 @@ class CameraView extends StatelessWidget {
                             Icons.add_photo_alternate_rounded,
                             color: Colors.white,
                             size: 35,
-                          )
+                          )),
+                      suffixIcon: CircleAvatar(
+                        backgroundColor: Color(0xFF075E54),
+                        child: IconButton(
+                            onPressed: (){
+                              onSend(imagepath,_controller.text.trim(),);
+                              _controller.clear();
+                            },
+                            icon: Icon(
+                              Icons.send,
+                              color: Colors.white,
+                            )),
                       ),
-                    suffixIcon: CircleAvatar(
-                      backgroundColor: Color(0xFF075E54),
-                      child: IconButton(onPressed: null, icon: Icon(Icons.send,color: Colors.white,)),
-                    ),
-                    hintStyle: TextStyle(color: Colors.white,fontSize: 20)
-                  ),
+                      hintStyle: TextStyle(color: Colors.white, fontSize: 20)),
                 ),
               ),
             ),

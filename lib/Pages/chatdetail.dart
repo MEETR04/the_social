@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
@@ -5,12 +6,18 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:the_social/Models/ChatModels.dart';
+import 'package:the_social/Pages/Camera.dart';
+import 'package:the_social/Pages/CameraView.dart';
 import 'package:the_social/Pages/Homepage.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
-import 'package:the_social/Pages/camera.dart';
+import 'package:the_social/Pages/StatusPage.dart';
+import 'package:the_social/Widgets/CameraScreen.dart';
+import 'package:the_social/Widgets/OwnFileCard.dart';
+import 'package:the_social/Widgets/ReplyFileCard.dart';
 import '../Models/MessageModel.dart';
 import '../Widgets/OwnMessageCard.dart';
 import '../Widgets/ReplyMessageCard.dart';
+import 'package:http/http.dart' as http;
 
 class chatdetail extends StatefulWidget {
   const chatdetail(
@@ -28,14 +35,15 @@ class _chatdetailState extends State<chatdetail> {
   FocusNode focusNode = FocusNode();
   TextEditingController emojicontroller = TextEditingController();
   bool sendbutton = false;
-  IO.Socket socket = IO.io("http://192.168.29.28:5000", <String, dynamic>{
+  IO.Socket socket = IO.io("http://192.168.29.251:5000", <String, dynamic>{
     "transports": ["websocket"],
     "autoConnect": false,
   });
   List<MessageModel> messages = [];
   ScrollController scrollController = ScrollController();
   ImagePicker imagePicker = ImagePicker();
-  late XFile file;
+  XFile? file;
+  int poptime = 0;
 
   @override
   void initState() {
@@ -58,26 +66,63 @@ class _chatdetailState extends State<chatdetail> {
       socket.emit("/signin", widget.sourcechat.id);
       socket.on("/message", (msg) {
         print(msg);
-        setMessage("destination", msg["message"]);
+        setMessage("destination", msg["message"], msg["path"]);
         scrollController.animateTo(scrollController.position.maxScrollExtent,
             duration: const Duration(milliseconds: 300), curve: Curves.easeOut);
       });
     });
+    print(socket.connected);
     socket.onConnectError((data) => print("Connect error : $data"));
     socket.onConnectTimeout((data) => print("Connection Timout error : $data"));
     socket.onDisconnect((data) => print("Server Disconnected: $data"));
   }
 
-  void sendMessage(String message, int sourceID, int targetID) {
-    setMessage("source", message);
-    socket.emit("/message",
-        {"message": message, "sourceID": sourceID, "targetID": targetID});
+  void sendMessage(String message, int sourceID, int targetID, String path) {
+    setMessage("source", message, path);
+    socket.emit("/message", {
+      "message": message,
+      "sourceID": sourceID,
+      "targetID": targetID,
+      "path": path
+    });
   }
 
-  void setMessage(String type, String message) {
-    MessageModel messageModel = MessageModel(type: type, message: message);
+  void setMessage(String type, String message, String path) {
+    MessageModel messageModel =
+        MessageModel(type: type, message: message, path: path);
     setState(() {
       messages.add(messageModel);
+    });
+  }
+
+  void sendImage(String path, String message) async {
+    print(
+      "$path",
+    );
+    print("$message");
+    for (int i = 0; i < poptime; i++) {
+      Navigator.pop(context);
+    }
+    setState(() {
+      poptime = 0;
+    });
+    var request = http.MultipartRequest(
+        "POST", Uri.parse("http://192.168.29.251:5000/routes/addimage"));
+    request.files.add(await http.MultipartFile.fromPath("img", path));
+    request.headers.addAll({
+      "Content-type": "multipart/form-data",
+    });
+    http.StreamedResponse response = await request.send();
+    var httpResponse = await http.Response.fromStream(response);
+    var data = json.decode(httpResponse.body);
+    print(data['path']);
+    print(response.statusCode);
+    setMessage("source", message, path);
+    socket.emit("/message", {
+      "message": message,
+      "sourceID": widget.sourcechat.id,
+      "targetID": widget.chatModel.id,
+      "path": data['path'],
     });
   }
 
@@ -154,28 +199,69 @@ class _chatdetailState extends State<chatdetail> {
           height: MediaQuery.sizeOf(context).height,
           width: MediaQuery.sizeOf(context).width,
           child: WillPopScope(
+            onWillPop: () {
+              if (show) {
+                setState(() {
+                  show = false;
+                });
+              } else {
+                Navigator.pop(context);
+              }
+              return Future.value(show);
+            },
             child: Column(
               children: [
                 Expanded(
-                    //height: MediaQuery.sizeOf(context).height - 170,
-                    child: ListView.builder(
-                        itemCount: messages.length + 1,
-                        shrinkWrap: true,
-                        controller: scrollController,
-                        itemBuilder: (context, index) {
-                          if (index == messages.length) {
-                            return Container(
-                              height: 70,
+                  //height: MediaQuery.sizeOf(context).height - 170,
+                  child: ListView.builder(
+                      itemCount: messages.length + 1,
+                      shrinkWrap: true,
+                      controller: scrollController,
+                      itemBuilder: (context, index) {
+                        if (index == messages.length) {
+                          return Container(
+                            height: 70,
+                          );
+                        }
+                        if (messages[index].type == "source") {
+                          if (messages[index].path.length > 0) {
+                            return OwnFileCard(
+                              path: messages[index].path,
+                              message: messages[index].message,
                             );
-                          }
-                          if (messages[index].type == "source") {
+                          } else {
                             return OwnMessageCard(
                                 message: messages[index].message);
+                          }
+                        } else {
+                          if (messages[index].path.length > 0) {
+                            return ReplyFileCard(
+                              path: messages[index].path,
+                              message: messages[index].message,
+                            );
                           } else {
                             return ReplyMessageCard(
                                 message: messages[index].message);
                           }
-                        })),
+                        }
+                      }),
+                  // child: ListView(
+                  //   children: [
+                  //     OwnFileCard(),
+                  //     ReplyFileCard(
+                  //       path: '',
+                  //     ),
+                  //     OwnFileCard(),
+                  //     ReplyFileCard(
+                  //       path: '',
+                  //     ),
+                  //     OwnFileCard(),
+                  //     ReplyFileCard(
+                  //       path: '',
+                  //     ),
+                  //   ],
+                  // ),
+                ),
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: Container(
@@ -248,15 +334,20 @@ class _chatdetailState extends State<chatdetail> {
                                                 padding: const EdgeInsets.only(
                                                     right: 12),
                                                 child: IconButton(
+                                                  icon: const Icon(
+                                                      Icons.camera_alt_rounded),
                                                   onPressed: () {
+                                                    setState(() {
+                                                      poptime = 2;
+                                                    });
                                                     Navigator.pushReplacement(
                                                         context,
                                                         MaterialPageRoute(
                                                             builder: (context) =>
-                                                                const CameraPage()));
+                                                                StatusPage()));
+                                                    CameraScreen(
+                                                        onImageSend: sendImage);
                                                   },
-                                                  icon: const Icon(
-                                                      Icons.camera_alt_rounded),
                                                 ),
                                               )
                                             ],
@@ -281,9 +372,11 @@ class _chatdetailState extends State<chatdetail> {
                                                 milliseconds: 300),
                                             curve: Curves.easeOut);
                                         sendMessage(
-                                            emojicontroller.text,
-                                            widget.sourcechat.id,
-                                            widget.chatModel.id);
+                                          emojicontroller.text,
+                                          widget.sourcechat.id,
+                                          widget.chatModel.id,
+                                          "",
+                                        );
                                         emojicontroller.clear();
                                         setState(() {
                                           sendbutton = false;
@@ -308,16 +401,6 @@ class _chatdetailState extends State<chatdetail> {
                 )
               ],
             ),
-            onWillPop: () {
-              if (show) {
-                setState(() {
-                  show = false;
-                });
-              } else {
-                Navigator.pop(context);
-              }
-              return Future.value(show);
-            },
           ),
         ),
       )
@@ -363,10 +446,14 @@ class _chatdetailState extends State<chatdetail> {
                   ),
                   InkWell(
                       onTap: () {
+                        setState(() {
+                          poptime = 3;
+                        });
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const CameraPage()));
+                                builder: (context) => CameraScreen(onImageSend: (){})));
+                        CameraScreen(onImageSend: sendImage);
                       },
                       child:
                           Attachinfo(Icons.camera_alt, Colors.red, "Camera")),
@@ -375,31 +462,22 @@ class _chatdetailState extends State<chatdetail> {
                   ),
                   InkWell(
                     onTap: () async {
-                      bool permissionGranted = await requestGalleryPermission();
-                      if (permissionGranted) {
-                        try {
-                          final pickedfile = await ImagePicker().pickImage(source: ImageSource.gallery);
-                          if (pickedfile != null) {
-                            // Handle the selected file
-                            print('Picked file path: ${pickedfile.path}');
-                            // Assign the picked file to your variable
-                            file = pickedfile;
-                          } else {
-                            // Handle the case when no image is selected
-                            print('No image selected');
-                          }
-                        } catch (e) {
-                          // Handle errors
-                          print('Error picking image: $e');
-                        }
-                      } else {
-                        // Handle the case when permission is not granted
-                        print('Gallery access permission denied');
-                      }
+                      setState(() {
+                        poptime = 2;
+                      });
+                      file = await imagePicker.pickImage(
+                          source: ImageSource.gallery);
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => CameraView(
+                                    imagepath: file!.path,
+                                    onSend: sendImage,
+                                  )));
                     },
-                    child: Attachinfo(Icons.insert_photo, Colors.purple, "Gallery"),
+                    child: Attachinfo(
+                        Icons.insert_photo, Colors.purple, "Gallery"),
                   )
-
                 ],
               ),
               const SizedBox(height: 15),
@@ -440,12 +518,4 @@ class _chatdetailState extends State<chatdetail> {
       ],
     );
   }
-  Future<bool> requestGalleryPermission() async {
-    var status = await Permission.photos.status;
-    if (!status.isGranted) {
-      status = await Permission.photos.request();
-    }
-    return status.isGranted;
-  }
-
 }

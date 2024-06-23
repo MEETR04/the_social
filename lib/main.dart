@@ -4,7 +4,6 @@ import 'package:the_social/Pages/LandingPage.dart';
 import 'package:the_social/Pages/LoginScreen.dart';
 import 'package:the_social/Pages/SplashScreen.dart';
 import 'package:the_social/Pages/StatusPage.dart';
-import 'package:the_social/Pages/camera.dart';
 import 'package:the_social/Widgets/CameraScreen.dart';
 import 'package:camera/camera.dart';
 
